@@ -18,4 +18,8 @@
         <Using Include="Xunit"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\TileGameEngine.Domain\TileGameEngine.Domain.csproj" />
+    </ItemGroup>
+
 </Project>
