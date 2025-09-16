@@ -10,11 +10,11 @@ public partial class Map
     private readonly byte[] _tiles;
     private readonly int _width;
     private readonly int _height;
-    private readonly object _lock = new object();
+    private readonly Lock _lock = new Lock();
 
     public int Width => _width;
     public int Height => _height;
-    public long MemoryUsageBytes => _tiles.LongLength;
+    public long MemoryUsageBytes => _tiles?.Length ?? 0;
 
     public Map(int width, int height)
     {
