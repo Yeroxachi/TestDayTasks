@@ -5,7 +5,7 @@ using TileGameEngine.Domain.Exceptions;
 namespace TileGameEngine.Domain.Entities;
 
 [MemoryPackable]
-public partial class Map
+public partial struct Map
 {
     private readonly byte[] _tiles;
     private readonly int _width;
@@ -63,7 +63,16 @@ public partial class Map
 
     public bool CanPlaceObjectInArea(Area area)
     {
-        return area.GetCoordinates().All(coord => CanPlaceObject(coord.X, coord.Y));
+        var coords = area.GetCoordinates();
+        foreach (var tile in coords)
+        {
+            if (!CanPlaceObject(tile.X, tile.Y))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public void FillArea(Area area, SurfaceType tileType)

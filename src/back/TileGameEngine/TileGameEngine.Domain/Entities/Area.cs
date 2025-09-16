@@ -32,4 +32,10 @@ public readonly partial struct Area(int x1, int y1, int x2, int y2)
             }
         }
     }
+    
+    public bool IntersectsWith(Area area)
+    {
+        return !(X2 < area.X1 || X1 > area.X2 ||
+                 Y2 < area.Y1 || Y1 > area.Y2);
+    }
 }

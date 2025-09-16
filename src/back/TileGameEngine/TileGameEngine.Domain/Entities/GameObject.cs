@@ -3,21 +3,19 @@
 namespace TileGameEngine.Domain.Entities;
 
 [MemoryPackable]
-public partial class GameObject
+public partial struct GameObject
 {
-    public uint Id { get; }
+    public Guid Id { get; }
     public TileCoordinate Position { get; private set; }
     public int Width { get; }
     public int Height { get; }
-    public string Type { get; }
 
-    public GameObject(uint id, TileCoordinate position, int width, int height, string type)
+    public GameObject(TileCoordinate position, int width, int height)
     {
-        Id = id;
+        Id = Guid.NewGuid();
         Position = position;
         Width = width;
         Height = height;
-        Type = type ?? throw new ArgumentNullException(nameof(type));
     }
 
     public void MoveTo(TileCoordinate newPosition)
