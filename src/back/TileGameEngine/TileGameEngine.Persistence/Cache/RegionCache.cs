@@ -11,9 +11,9 @@ public class RegionCache :  IRegionCache
 {
     private readonly IDatabase _database;
 
-    public RegionCache(IDatabase database)
+    public RegionCache(IConnectionMultiplexer redis)
     {
-        _database = database;
+        _database = redis.GetDatabase();
     }
     public async Task<Region?> GetByCoordinateAsync(TileCoordinate coordinate)
     {

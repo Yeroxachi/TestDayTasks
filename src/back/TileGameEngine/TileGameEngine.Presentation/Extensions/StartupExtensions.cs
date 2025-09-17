@@ -25,30 +25,34 @@ public static class StartupExtensions
     {
         serviceCollection.AddSingleton(sp =>
         {
-            var logger = sp.GetRequiredService<ILogger<UdpApiServer>>();
+            using var scope = sp.CreateScope();
+            var logger = scope.ServiceProvider.GetRequiredService<ILogger<UdpApiServer>>();
             var server = new UdpApiServer(UdpServerHelper.Port,logger);
             
-            var mapController = sp.GetRequiredService<MapController>();
+            var mapController = scope.ServiceProvider.GetRequiredService<MapController>();
             server.RegisterEndpoint("/map/gettiletype", "GET", mapController.HandleGetTileType);
             server.RegisterEndpoint("/map/settiletype", "POST", mapController.HandleSetTileType);
             server.RegisterEndpoint("/map/fillinarray", "POST", mapController.HandleFillArea);
 
 
-            var objectController = sp.GetRequiredService<ObjectController>();
+            var objectController = scope.ServiceProvider.GetRequiredService<ObjectController>();
             server.RegisterEndpoint("/objects/add", "POST", objectController.HandleAddObject);
             server.RegisterEndpoint("/objects/get", "GET", objectController.HandleGetGameObject);
             server.RegisterEndpoint("/objects/delete", "POST", objectController.HandleDeleteGameObject);
-            server.RegisterEndpoint("/objects/getbycoordinate", "GET", objectController.HandleGetGameObjectByCoordinate);
+            server.RegisterEndpoint("/objects/getbycoordinate", "GET",
+                objectController.HandleGetGameObjectByCoordinate);
             server.RegisterEndpoint("/objects/getallinarea", "GET", objectController.HandleGetAllGameObjectsInArea);
-            server.RegisterEndpoint("/objects/checkobjectinarea", "GET", objectController.HandleCheckGameObjectInArea);
-            
-            var regionController = sp.GetRequiredService<RegionController>();
+            server.RegisterEndpoint("/objects/checkobjectinarea", "GET",
+                objectController.HandleCheckGameObjectInArea);
+
+            var regionController = scope.ServiceProvider.GetRequiredService<RegionController>();
             server.RegisterEndpoint("/regions/generate", "POST", regionController.HandleGenerateRegions);
-            server.RegisterEndpoint("/regions/getbycoordinate", "POST", regionController.HandleGetRegionByCoordinate);
+            server.RegisterEndpoint("/regions/getbycoordinate", "POST",
+                regionController.HandleGetRegionByCoordinate);
             server.RegisterEndpoint("/regions/cheregioninarea", "GET", regionController.HandleCheckTileInRegion);
             server.RegisterEndpoint("/regions/getallinarea", "GET", regionController.HandleGetAllRegionsInArea);
             server.RegisterEndpoint("/regions/getbyid", "GET", regionController.HandleGetAllRegionsInArea);
-            
+
             return server;
         });
         
@@ -68,9 +72,9 @@ public static class StartupExtensions
 
     public static IServiceCollection AddUdpControllers(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddSingleton<MapController>();
-        serviceCollection.AddSingleton<ObjectController>();
-        serviceCollection.AddSingleton<RegionController>();
+        serviceCollection.AddScoped<MapController>();
+        serviceCollection.AddScoped<ObjectController>();
+        serviceCollection.AddScoped<RegionController>();
         
         return serviceCollection;
     }

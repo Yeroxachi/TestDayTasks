@@ -3,7 +3,6 @@ using TileGameEngine.Presentation.Helpers;
 using TileGameEngine.Presentation.Server;
 
 var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 
@@ -15,6 +14,7 @@ builder.Services.AddUdpControllers();
 
 builder.Services.AddUdpServer();
 
+var app = builder.Build();
 var udpServer = app.Services.GetRequiredService<UdpApiServer>();
 
 _ = udpServer.StartAsync(); 

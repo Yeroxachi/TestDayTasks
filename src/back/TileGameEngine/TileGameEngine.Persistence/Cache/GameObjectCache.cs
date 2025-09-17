@@ -13,9 +13,9 @@ public class GameObjectCache : IGameObjectCache
     private readonly IDatabase _database;
     private readonly ILogger<RedisCacheService> _logger;
 
-    public GameObjectCache(IDatabase database, ILogger<RedisCacheService> logger)
+    public GameObjectCache(IConnectionMultiplexer redis, ILogger<RedisCacheService> logger)
     {
-        _database = database;
+        _database = redis.GetDatabase();
         _logger = logger;
     }
 
