@@ -7,14 +7,14 @@ namespace TileGameEngine.Application.Services;
 
 public class ObjectService :  IObjectService
 {
-    private readonly Map _map;
+    private readonly IMapService _mapService;
     private readonly ILogger<ObjectService> _logger;
     private readonly ICacheService _cacheService;
     private readonly IGameObjectCache _gameObjectCache;
 
-    public ObjectService(ref Map map, ILogger<ObjectService> logger, ICacheService cacheService,  IGameObjectCache gameObjectCache)
+    public ObjectService(IMapService mapService, ILogger<ObjectService> logger, ICacheService cacheService, IGameObjectCache gameObjectCache)
     {
-        _map = map;
+        _mapService = mapService;
         _logger = logger;
         _cacheService = cacheService;
         _gameObjectCache = gameObjectCache;
@@ -24,7 +24,7 @@ public class ObjectService :  IObjectService
     {
         var objKey = CacheKey.GenerateCacheKey(obj.Id, CacheKey.GameObject);
         var objArea = obj.GetBoundingArea();
-        if (_map.CanPlaceObjectInArea(objArea))
+        if (_mapService.CanPlaceObjectInArea(objArea))
         {
             var objects = await GetAllGameObjectsInAreaAsync(objArea);
             if (objects.Length != 0)
