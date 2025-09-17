@@ -37,9 +37,9 @@ public class MapTests
         var map = new Map(5, 5);
 
         // Act & Assert
-        for (int x = 0; x < 5; x++)
+        for (var x = 0; x < 5; x++)
         {
-            for (int y = 0; y < 5; y++)
+            for (var y = 0; y < 5; y++)
             {
                 Assert.Equal(SurfaceType.Plain, map.GetTileType(x, y));
             }
@@ -213,9 +213,9 @@ public class MapTests
         map.FillArea(area, SurfaceType.Mountains);
 
         // Assert
-        for (int x = 2; x <= 4; x++)
+        for (var x = 2; x <= 4; x++)
         {
-            for (int y = 2; y <= 4; y++)
+            for (var y = 2; y <= 4; y++)
             {
                 Assert.Equal(SurfaceType.Mountains, map.GetTileType(x, y));
             }
@@ -301,9 +301,9 @@ public class MapTests
         var map = Map.FromTileList(tiles, 3, 3);
 
         // Assert
-        for (int x = 0; x < 3; x++)
+        for (var x = 0; x < 3; x++)
         {
-            for (int y = 0; y < 3; y++)
+            for (var y = 0; y < 3; y++)
             {
                 Assert.Equal(SurfaceType.Plain, map.GetTileType(x, y));
             }

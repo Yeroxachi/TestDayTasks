@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TileGameEngine.Persistence"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TileGameEngine.Tests", "TileGameEngine.Tests\TileGameEngine.Tests.csproj", "{76BEB2A6-6B63-402D-ABD7-4FE2A41DCA45}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TileGameEngine.Presentation", "TileGameEngine.Presentation\TileGameEngine.Presentation.csproj", "{A52EC036-55C4-4FE4-8B2E-BCF37C490AC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{76BEB2A6-6B63-402D-ABD7-4FE2A41DCA45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76BEB2A6-6B63-402D-ABD7-4FE2A41DCA45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76BEB2A6-6B63-402D-ABD7-4FE2A41DCA45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A52EC036-55C4-4FE4-8B2E-BCF37C490AC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A52EC036-55C4-4FE4-8B2E-BCF37C490AC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A52EC036-55C4-4FE4-8B2E-BCF37C490AC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A52EC036-55C4-4FE4-8B2E-BCF37C490AC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
