@@ -4,10 +4,8 @@ using TileGameEngine.Presentation.Server;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
-builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
-builder.Logging.SetMinimumLevel(LogLevel.Debug);
 
 builder.Services.AddCustomServices();
 

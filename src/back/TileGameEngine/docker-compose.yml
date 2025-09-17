@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tilegame_app
+    depends_on:
+      - redis
+    environment:
+      ConnectionStrings__Redis: "redis:6379,allowAdmin=true"
+    ports:
+      - "11000:11000"
+    networks:
+      - tilegame_network
+
+  redis:
+    image: redis:6.2-alpine
+    container_name: tilegame_redis
+    restart: always
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - tilegame_network
+
+networks:
+  tilegame_network:
+    driver: bridge
+
+volumes:
+  redis_data:
