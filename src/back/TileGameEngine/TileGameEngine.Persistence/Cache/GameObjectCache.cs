@@ -39,19 +39,19 @@ public class GameObjectCache : IGameObjectCache
 
         foreach (var member in members)
         {
-            if (!uint.TryParse(member.Member, out var id))
+            var key = member.Member.ToString();
+            if (string.IsNullOrEmpty(key))
+            {
                 continue;
-            
-            var value = await _database.StringGetAsync($"obj:{id}").ConfigureAwait(false);
-            if (value.IsNullOrEmpty)
-                continue;
-
+            }
             try
             {
+                var value = await _database.StringGetAsync(key);
                 byte[] bytes = value;
                 var obj = MemoryPackSerializer.Deserialize<GameObject>(bytes);
-            
-                if (obj.IntersectsWith(new Area(coordinate.X, coordinate.Y, coordinate.X, coordinate.Y)))
+
+                var objArea = obj.GetBoundingArea();
+                if (objArea.Contains(coordinate))
                     return obj;
             }
             catch (Exception e)
@@ -81,12 +81,15 @@ public class GameObjectCache : IGameObjectCache
 
         foreach (var member in members)
         {
-            var value = member.Member;
-            if (value.IsNullOrEmpty)
+            var key = member.Member.ToString();
+            if (string.IsNullOrEmpty(key))
+            {
                 continue;
+            }
 
             try
             {
+                var value = await _database.StringGetAsync(key);
                 byte[] bytes = value;
                 var obj = MemoryPackSerializer.Deserialize<GameObject>(bytes);
             
