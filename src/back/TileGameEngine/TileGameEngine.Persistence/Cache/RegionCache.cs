@@ -1,5 +1,4 @@
 ﻿using MemoryPack;
-using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 using TileGameEngine.Domain.Entities;
 using TileGameEngine.Domain.Helpers;
@@ -8,18 +7,15 @@ using TileGameEngine.Domain.Interfaces;
 namespace TileGameEngine.Persistence.Cache;
 
 //TODO Реализовать Параллельную обработку получения данных
-public class GameObjectCache : IGameObjectCache
+public class RegionCache :  IRegionCache
 {
     private readonly IDatabase _database;
-    private readonly ILogger<RedisCacheService> _logger;
 
-    public GameObjectCache(IDatabase database, ILogger<RedisCacheService> logger)
+    public RegionCache(IDatabase database)
     {
         _database = database;
-        _logger = logger;
     }
-
-    public async Task<GameObject?> GetByCoordinateAsync(TileCoordinate coordinate)
+    public async Task<Region?> GetByCoordinateAsync(TileCoordinate coordinate)
     {
         var (lon, lat) = GeoHelper.TileToLonLat(coordinate.X, coordinate.Y);
 
@@ -29,7 +25,7 @@ public class GameObjectCache : IGameObjectCache
         );
 
         var members = await _database.GeoRadiusAsync(
-            CacheKey.GameObject,
+            CacheKey.Region,
             lon,
             lat,
             searchRadiusMeters
@@ -49,11 +45,10 @@ public class GameObjectCache : IGameObjectCache
             {
                 var value = await _database.StringGetAsync(key);
                 byte[] bytes = value;
-                var obj = MemoryPackSerializer.Deserialize<GameObject>(bytes);
-
-                var objArea = obj.GetBoundingArea();
-                if (objArea.Contains(coordinate))
-                    return obj;
+                var region = MemoryPackSerializer.Deserialize<Region>(bytes);
+                
+                if (region.Area.Contains(coordinate))
+                    return region;
             }
             catch (Exception e)
             {
@@ -64,7 +59,7 @@ public class GameObjectCache : IGameObjectCache
         return null;
     }
 
-    public async Task<GameObject[]> GetAllObjectsInAreaAsync(Area area)
+    public async Task<Region[]> GetAllObjectsInAreaAsync(Area area)
     {
         var centerX = (area.X1 + area.X2) / 2;
         var centerY = (area.Y1 + area.Y2) / 2;
@@ -78,9 +73,9 @@ public class GameObjectCache : IGameObjectCache
         var members = await _database.GeoRadiusAsync(CacheKey.GameObject, lon, lat, searchRadiusMeters).ConfigureAwait(false);
 
         if (members.Length == 0)
-            return new List<GameObject>().ToArray();
+            return new List<Region>().ToArray();
 
-        var result = new List<GameObject>();
+        var result = new List<Region>();
 
         foreach (var member in members)
         {
@@ -94,10 +89,10 @@ public class GameObjectCache : IGameObjectCache
             {
                 var value = await _database.StringGetAsync(key);
                 byte[] bytes = value;
-                var obj = MemoryPackSerializer.Deserialize<GameObject>(bytes);
+                var region = MemoryPackSerializer.Deserialize<Region>(bytes);
             
-                if (obj.IntersectsWith(area))
-                    result.Add(obj);
+                if (region.Area.IntersectsWith(area))
+                    result.Add(region);
             }
             catch (Exception e)
             {

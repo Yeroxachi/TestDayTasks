@@ -2,9 +2,12 @@
 
 public static class CacheKey
 {
-    public const string GameObject = $"object";
-    public static string GenerateGameObjCacheKey(Guid id)
+    public const string GameObject = "object";
+    public const string Tile = "tile";
+    public const string Map = "map";
+    public const string Region = "region";
+    public static string GenerateCacheKey(Guid id, string keyName)
     {
-        return $"{GameObject}:{id}";
+        return $"{keyName}:{id}";
     }
 }

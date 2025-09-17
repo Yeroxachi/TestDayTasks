@@ -22,7 +22,7 @@ public class ObjectService :  IObjectService
 
     public async Task AddObjectAsync(GameObject obj)
     {
-        var objKey = CacheKey.GenerateGameObjCacheKey(obj.Id);
+        var objKey = CacheKey.GenerateCacheKey(obj.Id, CacheKey.GameObject);
         var objArea = obj.GetBoundingArea();
         if (_map.CanPlaceObjectInArea(objArea))
         {
@@ -42,14 +42,14 @@ public class ObjectService :  IObjectService
 
     public async Task<GameObject?> GetGameObjectAsync(Guid id)
     {
-        var objKey = CacheKey.GenerateGameObjCacheKey(id);
+        var objKey = CacheKey.GenerateCacheKey(id, CacheKey.GameObject);
         var gameObj = await _cacheService.GetAsync<GameObject>(objKey);
         return gameObj;
     }
 
     public async Task DeleteGameObjectAsync(Guid id)
     {
-        var objKey = CacheKey.GenerateGameObjCacheKey(id);
+        var objKey = CacheKey.GenerateCacheKey(id, CacheKey.GameObject);
         await _cacheService.RemoveAsync(objKey);
     }
 
@@ -61,7 +61,7 @@ public class ObjectService :  IObjectService
 
     public async Task<bool> CheckGameObjectInAreaAsync(Guid id, Area area)
     {
-        var objKey = CacheKey.GenerateGameObjCacheKey(id);
+        var objKey = CacheKey.GenerateCacheKey(id, CacheKey.GameObject);
         var gameObj = await _cacheService.GetAsync<GameObject>(objKey);
         if (gameObj.HasValue)
         {
